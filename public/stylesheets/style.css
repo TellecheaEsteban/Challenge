@@ -1,8 +1,49 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
-a {
-  color: #00B7FF;
+*{
+  margin: 0;
+}
+body {
+  background-color: #1B262C;
+}
+.navBar{
+  background-color: #3282B8;
+}
+.navBarList{
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+.navBarList li{
+  list-style-type: none;
+
+}
+.login{
+  padding: 10px;
+}
+.login a{
+  text-decoration: none;
+}
+.forms{
+  display: flex;
+  justify-content: space-around;
+}
+.forms a{
+  text-decoration: none;
+}
+.forms a:hover{
+  background-color: black;
+}
+.formLinks{
+  color:#1B262C;
+  position: relative;
+  top:25%
+}
+.formItem{
+  height: 250px;
+  width: 200px;
+  margin-top: 40px;
+  border-radius: 10px;
+  background-color: #3282B8;
+  display: flex;
+  justify-content: center;
 }
