@@ -1,8 +1,11 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var indexcontroller = require ("../controllers/indexcontroller")
+const usersAPIrout = require("./api/users");
+const transactionsAPIrout = require("./api/transactions");
 
-/* GET home page. */
-router.get('/', indexcontroller.index);
+//user routes (API)
+router.use("/users", usersAPIrout);
+//user routes (API)
+router.use("/transactions", transactionsAPIrout);
 
 module.exports = router;

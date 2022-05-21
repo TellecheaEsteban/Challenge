@@ -2,13 +2,13 @@ module.exports =(sequelize, dataTypes)=>{
     let alias = 'Users';
     let cols = {
        name:{
-           type:dataTypes.VARCHAR(255)
+           type:dataTypes.STRING(255)
        },
        email:{
-           type:dataTypes.VARCHAR(255)
+           type:dataTypes.STRING(255)
        },
        password:{
-           type:dataTypes.VARCHAR(255)
+           type:dataTypes.STRING(255)
        }
     };
     let config={
@@ -16,6 +16,11 @@ module.exports =(sequelize, dataTypes)=>{
         timestamps: false
     }
         const Users =sequelize.define(alias,cols,config);
-   
+        Users.associate=(models)=>{
+            Users.hasMany(models.Transactions,{
+                as:"transaction",
+                foreignKey:"user_id"
+            });
+        };
         return Users;
        }

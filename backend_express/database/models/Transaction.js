@@ -2,7 +2,7 @@ module.exports =(sequelize, dataTypes)=>{
     let alias = 'Transactions';
     let cols = {
         concept:{
-            type:dataTypes.VARCHAR(255)
+            type:dataTypes.STRING(255)
         },
         amount:{
             type:dataTypes.DECIMAL(6,2)
@@ -18,15 +18,15 @@ module.exports =(sequelize, dataTypes)=>{
         const Transactions =sequelize.define(alias,cols,config);
 
         Transactions.associate=(models)=>{
-            Transactions.belongsTo(models.users,{
+            Transactions.belongsTo(models.Users,{
                 as:"users",
                 foreignKey:"user_id"
             }),
-            Transactions.belongsTo(models.category,{
+            Transactions.belongsTo(models.Transaction_category,{
                 as:"transaction_category",
                 foreignKey:"cat_id"
             }),
-            Transactions.belongsTo(models.type, {
+            Transactions.belongsTo(models.Transaction_type, {
                 as:"transaction_type",
                 foreignKey:"type_id"
             })
