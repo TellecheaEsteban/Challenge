@@ -1,5 +1,5 @@
 const operacionesController={
-    show:(req,res)=> {
+    showapi:(req,res)=> {
         res.render("operaciones")
     }
 }
