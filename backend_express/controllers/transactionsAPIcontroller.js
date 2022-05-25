@@ -33,7 +33,7 @@ const transactionsAPIcontroller={
     getLastTen:async (req, res) => {
         try {
             let userId = 1; //RECIBIR POR PARAM DESDE EL FRONT
-            let transaction = await Transactions.findAll({
+            let operations = await Transactions.findAll({
                 where: {
                     user_id: userId,
                 },
@@ -41,7 +41,28 @@ const transactionsAPIcontroller={
                 include: ["transaction_type", "transaction_category"],
                 limit: 10,
             });
-            res.json(transaction);
+
+            let operationsJSON = [];
+            operations.forEach((operation) => {
+                let newOperation = {
+                    id: operation.id,
+                    concept: operation.concept,
+                    amount: operation.amount,
+                    date: operation.date,
+                    operation_type:
+                        operation.transaction_type !== null
+                            ? operation.transaction_type.name
+                            : "Sin tipo",
+                    operation_category:
+                        operation.transaction_category !== null
+                            ? operation.transaction_category.name
+                            : "Sin categoría",
+                };
+
+                operationsJSON.push(newOperation);
+            });
+            res.header("Access-Control-Allow-Origin", "*");
+            res.json(operationsJSON);
         } catch (error) {
             res.send(error);
         }
@@ -85,14 +106,34 @@ const transactionsAPIcontroller={
         let id = req.params.id;
         let userId = 1; //RECIBIR POR PARAM DESDE EL FRONT
         try {
-            let transactions = await Transactions.findAll({
+            let operations = await Transactions.findAll({
                 include: ["transaction_type", "transaction_category"],
                 where: {
                     type_id: id,
                     user_id: userId,
                 },
             });
-            res.json(transactions);
+            let operationsJSON = [];
+            operations.forEach((operation) => {
+                let newOperation = {
+                    id: operation.id,
+                    concept: operation.concept,
+                    amount: operation.amount,
+                    date: operation.date,
+                    operation_type:
+                        operation.transaction_type !== null
+                            ? operation.transaction_type.name
+                            : "Sin tipo",
+                    operation_category:
+                        operation.transaction_category !== null
+                            ? operation.transaction_category.name
+                            : "Sin categoría",
+                };
+
+                operationsJSON.push(newOperation);
+            });
+            res.header("Access-Control-Allow-Origin", "*");
+            res.json(operationsJSON);
         } catch (error) {
             res.send(error);
         }
@@ -100,6 +141,7 @@ const transactionsAPIcontroller={
     getTransactionsTypes: async (req, res) => {
         try {
             const transactionTypes = await Transaction_type.findAll();
+            res.header("Access-Control-Allow-Origin", "*");
             res.json(transactionTypes);
         } catch (error) {
             res.status(400);
@@ -117,7 +159,7 @@ const transactionsAPIcontroller={
                     user_id: userId,
                 },
             });
-            console.log(transactions)
+            
             let transactionsJSON = [];
             transactions.forEach((transaction) => {
                 let newTransaction = {
@@ -125,11 +167,11 @@ const transactionsAPIcontroller={
                     concept: transaction.concept,
                     amount: transaction.amount,
                     date: transaction.date,
-                    transaction_type:
+                    operation_type:
                         transaction.transaction_type !== null
                             ? transaction.transaction_type.name
                             : "Sin tipo",
-                    transaction_category:
+                    operation_category:
                         transaction.transaction_category !== null
                             ? transaction.transaction_category.name
                             : "Sin categoría",
@@ -137,6 +179,7 @@ const transactionsAPIcontroller={
 
                 transactionsJSON.push(newTransaction);
             });
+            res.header("Access-Control-Allow-Origin", "*");
             res.json(transactionsJSON);
         } catch (error) {
             res.send(error);
@@ -149,7 +192,7 @@ const transactionsAPIcontroller={
             let transaction = await Transactions.findByPk(id, {
                 include: ["transaction_type", "transaction_category"],
             });
-
+            res.header("Access-Control-Allow-Origin", "*");
             res.json(transaction);
         } catch (error) {
             res.send(error);
@@ -170,6 +213,7 @@ const transactionsAPIcontroller={
                 cat_id: category,
                 type_id: req.body.type_id,
             });
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send({ message: "Operation created" });
         } catch (error) {
             res.status(400);
@@ -183,7 +227,7 @@ const transactionsAPIcontroller={
                 req.body.cat_id !== ""
                     ? req.body.cat_id
                     : null;
-            console.log(req.body);
+            
             await Transactions.update(
                 {
                     concept: req.body.concept,
@@ -197,6 +241,7 @@ const transactionsAPIcontroller={
                     },
                 }
             );
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send({ message: "Operation updated" });
         } catch (error) {
             res.status(400);
@@ -205,14 +250,16 @@ const transactionsAPIcontroller={
     },
     deleteTransaction:async (req, res) => {
         try {
-            console.log(req.body.id);
+            
             await Transactions.destroy({
                 where: {
                     id: req.body.id,
                 },
             });
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send({ message: "Operation deleted" });
         } catch (error) {
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(400);
             res.send(error);
         }
